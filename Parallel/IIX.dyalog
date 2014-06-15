@@ -83,7 +83,7 @@
     ∇ {r}←cap PEACHUpdate arg
       PF.texts.Caption←⍕¨arg
       PF.bars.Thumb←arg
-      PF.Caption←cap ⍝ /// Work around bug
+      PF.Caption←cap ⍝ /// Work around bug.
       r←⍬
     ∇
 

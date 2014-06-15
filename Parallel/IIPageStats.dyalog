@@ -1,7 +1,7 @@
 ﻿:Namespace IIPageStats
 ⍝ Future/Isolate code sample, using #.IIX.PEACH    
 ⍝   Report 'al' 
-⍝   ... to get a letter frequency count for home pages of newspapers in Alabama
+⍝   ... to get a letter frequency count for home pages of newspapers in Alabama.
 
     (⎕IO ⎕ML)←1
     alphabet←'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'  
