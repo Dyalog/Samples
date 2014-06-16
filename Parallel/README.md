@@ -1,4 +1,4 @@
-Dyalog/Samples/Parallel
+﻿Dyalog/Samples/Parallel
 =======================
 
 This folder contains code samples which illustrate the use of Futures and Isolates.
@@ -22,7 +22,7 @@ Arg/Operand   | Example      | Description          |
 --------------|--------------|----------------------|
 left, right   |              | operand arguments.    |
 function      | 'foo'        | Must be a quoted character vector.
-callback      | 'cb'         | Right argument will be a count of calls completed per isolate, plus the total number of calls started. Pass an empty vector ('') to get the progress form.|
+callback      | 'cb'         | Right argument will be a count of calls completed per isolate, plus the total number of calls started. Pass an empty vector ('') to get the progress form. The callback function should return 0 if all is OK, or 1 to abort the current process. The default version returns 1 if the progress form is closed.|
 cblarg        | 'Hello'   | Optional left argument to the callback function. If you use the default progress form, the value will be used as the caption.|
 isolates      | ''<br>ns<br>isolates           | Empty vector to create (≢processors) empty isolates<br>Scalar namespace to create (≢processors) clones of ns<br>or: a Vector of pre-created isolates|
 

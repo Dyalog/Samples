@@ -1,7 +1,7 @@
 ﻿:Namespace IIX
 ⍝ Parallel Extensions.
         
-    ∇ r←{left}(fns PEACH iss)right;dyadic;fn;cb;n;counts;shape;ni;i;count;done;failed;next;run1iso;callbk;expr;z;PF;cblarg
+    ∇ r←{left}(fns PEACH iss)right;dyadic;fn;cb;n;counts;shape;ni;i;count;done;failed;next;run1iso;callbk;expr;z;PF;cblarg;cancelled
     ⍝ IÏ using persistent Isolates:
     ⍝
     ⍝ iss is a list of refs to pre-existing isolates to use
@@ -46,24 +46,25 @@
           r[next]←⊂⍎expr
           counts[⍺]+←1
           z←{0::failed[⍵]←1 ⋄ done[⍵]←1⊣+r[⍵]}next ⍝ Reference it
-          z←cblarg callbk counts,count⌊n
-          ⍺ ∇ ⍵  ⍝ loop until done
+          cblarg callbk counts,count⌊n:''⊣⎕THIS.cancelled←1
+          ⍺ ∇ ⍵    ⍝ loop until done
       }
      
       expr←(dyadic/'(next⊃left) '),'⍵.{',(dyadic/'⍺ '),fn,'⍵} next⊃right'
+      cancelled←0
       :If 1=≢iss ⍝ Only one: do it in main thread
           z←1 run1iso⊃iss
       :Else
           z←⎕TSYNC(⍳ni)run1iso&¨iss
       :EndIf
+      ⎕SIGNAL cancelled/6
     ∇
               
     ∇ r←PEACHForm(caption nprocs nitems);p;labels;pos;pb;n
     ⍝ Make a progress form with a progress bar per process and one for the total
      
       :Trap 0
-          r←1⊣'PF'⎕WC'Form'caption('Coord' 'Pixel')('Size'((40+25×nprocs)800))('EdgeStyle' 'Dialog')('Border' 2)
-          PF.Caption←caption ⍝ /// Work around bug
+          r←1⊣'PF'⎕WC'Form'caption('Coord' 'Pixel')('Size'((40+25×nprocs)800))('Border' 3)
       :Else ⋄ →r←0 ⍝ Unable to create a form
       :EndTrap
       PF.texts←PF.bars←(1+nprocs)⍴PF
@@ -80,11 +81,13 @@
       2 ⎕NQ'.' 'Flush'
     ∇
 
-    ∇ {r}←cap PEACHUpdate arg
-      PF.texts.Caption←⍕¨arg
-      PF.bars.Thumb←arg
-      PF.Caption←cap ⍝ /// Work around bug.
-      r←⍬
+    ∇ {abort}←cap PEACHUpdate arg
+      :Trap abort←0
+          PF.texts.Caption←⍕¨arg
+          PF.bars.Thumb←arg
+      :Else
+          abort←1 ⍝ User killed the GUI
+      :EndTrap
     ∇
 
 :EndNamespace
