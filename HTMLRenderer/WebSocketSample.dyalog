@@ -1,6 +1,7 @@
-﻿ resp←WebSocketSample args;title;html;obj;ev;wsid;url;data;type;fin;reason;code;fn;show
+﻿ resp←WebSocketSample args;title;html;obj;ev;wsid;url;data;type;fin;reason;code;fn;show;⎕ML;⎕IO
      ⍝ general websocket test framework
      ⍝ use this function in conjunction with ∇Send
+ ⎕ML←⎕IO←1
  show←{n←' '(≠⊆⊢)⍺ ⋄ n,⍪{len←≢⍵ ⋄ ↑⍕{⍵⊆⍨~⍵∊⎕UCS 13 10}{(⍕len),'⍴',(200↑⍵),'...'}⍣(200<len)⊢⍵}∘⍕¨(≢n)↑⍵}
 StartHTML:→EndHTML
      ⍝  <!DOCTYPE html>
