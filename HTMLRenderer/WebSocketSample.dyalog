@@ -1,6 +1,7 @@
-﻿ resp←WebSocketSample args;title;html;obj;ev;wsid;url;data;type;fin;reason;code;fn
+﻿ resp←WebSocketSample args;title;html;obj;ev;wsid;url;data;type;fin;reason;code;fn;show
      ⍝ general websocket test framework
      ⍝ use this function in conjunction with ∇Send
+ show←{n←' '(≠⊆⊢)⍺ ⋄ n,⍪{len←≢⍵ ⋄ ↑⍕{⍵⊆⍨~⍵∊⎕UCS 13 10}{(⍕len),'⍴',(200↑⍵),'...'}⍣(200<len)⊢⍵}∘⍕¨(≢n)↑⍵}
 StartHTML:→EndHTML
      ⍝  <!DOCTYPE html>
      ⍝  <html>
@@ -157,7 +158,7 @@ StartCode:→EndCode
      ⍝         ⍝ parms [1] msg [2] datatype (1-text, 2-bin)
      ⍝         (msg type)←''  0{(≢⍺)↑⍵,(≢⍵)↓⍺},⊆parms
      ⍝         2 ⎕NQ _hr 'WebSocketSend' _wsid msg 1 ((1+type=0)⊃type,1+(⎕DR'')≠⎕DR msg)
-EndCode: ⊢⎕FX('_hr' '_wsid'⎕R('''',obj,'''')('''',wsid,'''')){⍵↓⍨⍵⍳'⍝'}¨(1+StartCode)↓EndCode↑⎕NR fn
+EndCode: ' function defined',⍨⎕FX('_hr' '_wsid'⎕R('''',obj,'''')('''',wsid,'''')){⍵↓⍨⍵⍳'⍝'}¨(1+StartCode)↓EndCode↑⎕NR fn
 
      :Case 'WebSocketReceive'
          ⎕←'obj ev wsid data type fin'show args
